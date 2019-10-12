@@ -241,11 +241,6 @@ func (s *Server) dispatch() {
 			if ch, exists := s.getChannel(c.channel); exists {
 				ch.removeClient(c)
 				s.options.Logger.Printf("client disconnected from channel '%s'.", ch.name)
-
-				if ch.ClientCount() == 0 {
-					s.options.Logger.Printf("channel '%s' has no clients.", ch.name)
-					s.removeChannel(ch)
-				}
 			}
 
 		// Close channel and all clients in it.
