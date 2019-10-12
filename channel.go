@@ -8,6 +8,7 @@ import (
 type Channel struct {
 	mu          sync.RWMutex
 	lastEventID string
+	lastMessage *Message
 	name        string
 	clients     map[*Client]bool
 }
@@ -16,6 +17,7 @@ func newChannel(name string) *Channel {
 	return &Channel{
 		sync.RWMutex{},
 		"",
+		nil,
 		name,
 		make(map[*Client]bool),
 	}
@@ -23,13 +25,18 @@ func newChannel(name string) *Channel {
 
 // SendMessage broadcast a message to all clients in a channel.
 func (c *Channel) SendMessage(message *Message) {
+	if message == nil {
+		return
+	}
+
 	c.lastEventID = message.id
+	c.lastMessage = message
 
 	c.mu.RLock()
 
 	for c, open := range c.clients {
-		if open {
-			c.send <- message
+		if open && c.LastEventID() != message.id {
+			c.SendMessage(message)
 		}
 	}
 

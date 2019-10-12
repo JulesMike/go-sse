@@ -17,6 +17,10 @@ func newClient(lastEventID, channel string) *Client {
 
 // SendMessage sends a message to client.
 func (c *Client) SendMessage(message *Message) {
+	if message == nil {
+		return
+	}
+
 	c.lastEventID = message.id
 	c.send <- message
 }

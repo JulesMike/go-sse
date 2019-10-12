@@ -82,6 +82,12 @@ func (s *Server) ServeHTTP(response http.ResponseWriter, request *http.Request) 
 		closeNotify := response.(http.CloseNotifier).CloseNotify()
 
 		go func() {
+			// Replay last message for new client
+			if ch, ok := s.getChannel(channelName); ok {
+				c.SendMessage(ch.lastMessage)
+				s.options.Logger.Printf("message replayed to new user from channel '%s'.", channelName)
+			}
+
 			<-closeNotify
 			s.removeClient <- c
 		}()
@@ -116,7 +122,7 @@ func (s *Server) SendMessage(channelName string, message *Message) {
 		ch.SendMessage(message)
 		s.options.Logger.Printf("message sent to channel '%s'.", channelName)
 	} else {
-		s.options.Logger.Printf("message not sent because channel '%s' has no clients.", channelName)
+		s.options.Logger.Printf("message not sent because channel '%s' does not exist.", channelName)
 	}
 }
 
@@ -177,7 +183,8 @@ func (s *Server) CloseChannel(name string) {
 	s.closeChannel <- name
 }
 
-func (s *Server) addChannel(name string) *Channel {
+// AddChannel adds a new channel
+func (s *Server) AddChannel(name string) *Channel {
 	ch := newChannel(name)
 
 	s.mu.Lock()
@@ -223,7 +230,7 @@ func (s *Server) dispatch() {
 			ch, exists := s.getChannel(c.channel)
 
 			if !exists {
-				ch = s.addChannel(c.channel)
+				ch = s.AddChannel(c.channel)
 			}
 
 			ch.addClient(c)
