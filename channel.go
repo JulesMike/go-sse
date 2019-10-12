@@ -35,7 +35,7 @@ func (c *Channel) SendMessage(message *Message) {
 	c.mu.RLock()
 
 	for c, open := range c.clients {
-		if open && c.LastEventID() != message.id {
+		if open && (message.id == "" || c.LastEventID() != message.id) {
 			c.SendMessage(message)
 		}
 	}
