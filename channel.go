@@ -29,9 +29,6 @@ func (c *Channel) SendMessage(message *Message) {
 		return
 	}
 
-	c.lastEventID = message.id
-	c.lastMessage = message
-
 	c.mu.RLock()
 
 	for c, open := range c.clients {
@@ -39,6 +36,9 @@ func (c *Channel) SendMessage(message *Message) {
 			c.SendMessage(message)
 		}
 	}
+
+	c.lastEventID = message.id
+	c.lastMessage = message
 
 	c.mu.RUnlock()
 }
