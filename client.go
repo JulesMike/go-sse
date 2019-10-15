@@ -21,7 +21,10 @@ func (c *Client) SendMessage(message *Message) {
 		return
 	}
 
-	c.lastEventID = message.id
+	if message.id != "heartbeat" {
+		c.lastEventID = message.id
+	}
+
 	c.send <- message
 }
 
