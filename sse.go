@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 	"sync"
-	"time"
 )
 
 // Server represents a server sent events server.
@@ -89,18 +88,8 @@ func (s *Server) ServeHTTP(response http.ResponseWriter, request *http.Request) 
 				s.options.Logger.Printf("message replayed to new user from channel '%s'.", channelName)
 			}
 
-			ticker := time.NewTicker(15 * time.Second)
-
-			// Heartbeat
-			for {
-				select {
-				case <-ticker.C:
-					c.SendMessage(NewMessage("hearbeat", time.Now().String(), "message"))
-				case <-closeNotify:
-					s.removeClient <- c
-					return
-				}
-			}
+			<-closeNotify
+			s.removeClient <- c
 		}()
 
 		response.WriteHeader(http.StatusOK)
