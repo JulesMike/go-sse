@@ -1,8 +1,9 @@
 package sse
 
 import (
-	"log"
 	"net/http"
+
+	"github.com/sirupsen/logrus"
 )
 
 // Options holds server configurations.
@@ -15,7 +16,7 @@ type Options struct {
 	// Default channel name is the request path.
 	ChannelNameFunc func(*http.Request) string
 	// All usage logs end up in Logger
-	Logger *log.Logger
+	Logger *logrus.Entry
 }
 
 func (opt *Options) hasHeaders() bool {

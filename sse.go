@@ -3,10 +3,10 @@ package sse
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"os"
 	"sync"
+
+	"github.com/sirupsen/logrus"
 )
 
 // Server represents a server sent events server.
@@ -24,12 +24,14 @@ type Server struct {
 func NewServer(options *Options) *Server {
 	if options == nil {
 		options = &Options{
-			Logger: log.New(os.Stdout, "go-sse: ", log.LstdFlags),
+			Logger: logrus.NewEntry(logrus.New()),
 		}
 	}
 
 	if options.Logger == nil {
-		options.Logger = log.New(ioutil.Discard, "", log.LstdFlags)
+		logger := logrus.New()
+		logger.SetOutput(ioutil.Discard)
+		options.Logger = logrus.NewEntry(logger)
 	}
 
 	s := &Server{

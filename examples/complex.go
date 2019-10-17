@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
-	"github.com/alexandrevicenzi/go-sse"
+	"github.com/JulesMike/go-sse"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 			return request.URL.Path
 		},
 		// Print debug info
-		Logger: log.New(os.Stdout, "go-sse: ", log.Ldate|log.Ltime|log.Lshortfile),
+		Logger: logrus.NewEntry(logrus.New()),
 	})
 
 	defer s.Shutdown()
