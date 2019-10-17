@@ -36,7 +36,7 @@ func TestServer(t *testing.T) {
 
 	for n := 0; n < 2; n++ {
 		name := fmt.Sprintf("CH-%d", n+1)
-		srv.addChannel(name)
+		srv.AddChannel(name)
 		// fmt.Printf("Channel %s registed\n", name)
 	}
 

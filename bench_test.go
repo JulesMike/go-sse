@@ -68,7 +68,7 @@ func BenchmarkSendMessage(b *testing.B) {
 	defer srv.Shutdown()
 
 	for n := 0; n < 10; n++ {
-		srv.addChannel(fmt.Sprintf("CH-%d", n+1))
+		srv.AddChannel(fmt.Sprintf("CH-%d", n+1))
 	}
 
 	wgReg := sync.WaitGroup{}
