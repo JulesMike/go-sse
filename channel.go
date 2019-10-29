@@ -8,7 +8,6 @@ import (
 type Channel struct {
 	mu          sync.RWMutex
 	lastEventID string
-	lastMessage *Message
 	name        string
 	clients     map[*Client]bool
 }
@@ -17,7 +16,6 @@ func newChannel(name string) *Channel {
 	return &Channel{
 		sync.RWMutex{},
 		"",
-		nil,
 		name,
 		make(map[*Client]bool),
 	}
@@ -30,7 +28,6 @@ func (c *Channel) SendMessage(message *Message) {
 	}
 
 	c.lastEventID = message.id
-	c.lastMessage = message
 
 	c.mu.RLock()
 

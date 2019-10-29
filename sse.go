@@ -84,12 +84,6 @@ func (s *Server) ServeHTTP(response http.ResponseWriter, request *http.Request) 
 		closeNotify := response.(http.CloseNotifier).CloseNotify()
 
 		go func() {
-			// Replay last message for new client
-			if ch, ok := s.getChannel(channelName); ok {
-				c.SendMessage(ch.lastMessage)
-				s.options.Logger.Printf("message replayed to new user from channel '%s'.", channelName)
-			}
-
 			<-closeNotify
 			s.removeClient <- c
 		}()
