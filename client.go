@@ -7,6 +7,7 @@ type Client struct {
 	send chan *Message
 }
 
+// newClient returns a new client
 func newClient(lastEventID, channel string) *Client {
 	return &Client{
 		lastEventID,

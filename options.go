@@ -12,6 +12,9 @@ type Options struct {
 	RetryInterval int
 	// Headers allow to set custom headers (useful for CORS support).
 	Headers map[string]string
+	// OnClientConnect allows to execute custom logic when client connects for
+	// first time
+	OnClientConnect func(c *Client)
 	// ChannelNameFunc allow to create custom channel names.
 	// Default channel name is the request path.
 	ChannelNameFunc func(*http.Request) string

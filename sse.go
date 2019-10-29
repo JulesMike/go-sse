@@ -84,6 +84,10 @@ func (s *Server) ServeHTTP(response http.ResponseWriter, request *http.Request) 
 		closeNotify := response.(http.CloseNotifier).CloseNotify()
 
 		go func() {
+			if s.options.OnClientConnect != nil {
+				s.options.OnClientConnect(c)
+			}
+
 			<-closeNotify
 			s.removeClient <- c
 		}()

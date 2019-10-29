@@ -14,10 +14,12 @@ type Message struct {
 	retry int
 }
 
+// SimpleMessage returns a new simple message
 func SimpleMessage(data string) *Message {
 	return NewMessage("", data, "")
 }
 
+// NewMessage returns a new message
 func NewMessage(id, data, event string) *Message {
 	return &Message{
 		id,
@@ -27,6 +29,7 @@ func NewMessage(id, data, event string) *Message {
 	}
 }
 
+// String implements the Stringer interface
 func (m *Message) String() string {
 	var buffer bytes.Buffer
 
