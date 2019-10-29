@@ -49,7 +49,7 @@ func TestServer(t *testing.T) {
 			wgReg.Add(1)
 			wgCh.Add(1)
 
-			go func(id string) {
+			go func(id, name string, ch *Channel) {
 				c := newClient("", name)
 				ch.addClient(c)
 
@@ -62,7 +62,7 @@ func TestServer(t *testing.T) {
 				}
 
 				wgCh.Done()
-			}(fmt.Sprintf("C-%d", n+1))
+			}(fmt.Sprintf("C-%d", n+1), name, ch)
 		}
 	}
 

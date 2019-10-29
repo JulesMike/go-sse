@@ -79,7 +79,7 @@ func BenchmarkSendMessage(b *testing.B) {
 			wgReg.Add(1)
 			wgCh.Add(1)
 
-			go func() {
+			go func(name string, ch *Channel) {
 				c := newClient("", name)
 				ch.addClient(c)
 
@@ -89,7 +89,7 @@ func BenchmarkSendMessage(b *testing.B) {
 				}
 
 				wgCh.Done()
-			}()
+			}(name, ch)
 		}
 	}
 
