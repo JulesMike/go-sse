@@ -67,8 +67,9 @@ func (s *Server) ServeHTTP(response http.ResponseWriter, request *http.Request) 
 
 	if request.Method == "GET" {
 		h.Set("Content-Type", "text/event-stream")
-		h.Set("Cache-Control", "no-cache")
 		h.Set("Connection", "keep-alive")
+		h.Set("Cache-Control", "no-cache")
+		h.Set("X-Accel-Buffering", "no")
 
 		var channelName string
 
